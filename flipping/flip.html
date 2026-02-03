@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Multi Page Book Flip</title>
+
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #eee;
+    font-family: Arial, sans-serif;
+  }
+
+  .book-container {
+    perspective: 2000px;
+  }
+
+.book {
+  position: relative;
+  width: 300px;
+  height: 400px;
+  perspective: 2000px;
+}
+
+  .page {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    /* transform-origin: left; */
+    transform-style: preserve-3d;
+    /* transition: transform 0.9s ease; */
+    transform-origin: left;
+    transition: transform 0.9s ease;
+    box-shadow:
+    inset -20px 0 30px rgba(0,0,0,0.25),
+    0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  
+
+  .page.flipped {
+    transform: rotateY(-180deg);
+      box-shadow:
+    inset 20px 0 30px rgba(0,0,0,0.2);
+  }
+
+  .side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  .front {
+    background: white;
+  }
+
+  .back {
+    transform: rotateY(180deg);
+    background: white;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .controls {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: #222;
+    color: white;
+    border-radius: 4px;
+  }
+  .page {
+  cursor: pointer;
+}
+
+.page.flipped {
+  pointer-events: none;
+}
+.click-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  cursor: pointer;
+  background: transparent;
+  touch-action: none;
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="book-container">
+  <div class="book" id="book">
+
+    <!-- Page 1 -->
+    <div class="page">
+      <div class="side front">
+        <img src="https://picsum.photos/300/400?1">
+      </div>
+      <div class="side back">
+        <img src="https://picsum.photos/300/400?2">
+      </div>
+    </div>
+
+    <!-- Page 2 -->
+    <div class="page">
+      <div class="side front">
+        <img src="https://picsum.photos/300/400?3">
+      </div>
+      <div class="side back">
+        <img src="https://picsum.photos/300/400?4">
+      </div>
+    </div>
+
+    <!-- Page 3 -->
+    <div class="page">
+      <div class="side front">
+        <img src="https://picsum.photos/300/400?5">
+      </div>
+      <div class="side back">
+        <img src="https://picsum.photos/300/400?6">
+      </div>
+    </div>
+
+  </div>
+</div>
+  <div class="click-layer"></div>
+<div class="controls">
+  <button onclick="prevPage()">⬅ Prev</button>
+  <button onclick="nextPage()">Next ➡</button>
+</div>
+<audio id="flipSound" preload="auto">
+  <source src="https://www.soundjay.com/books/page-flip-01a.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const pages = document.querySelectorAll(".page");
+  const clickLayer = document.querySelector(".click-layer");
+  const flipSound = document.getElementById("flipSound");
+
+  let currentPage = 0;
+  const totalPages = pages.length;
+
+  let startX = 0;
+
+  function playSound() {
+    flipSound.currentTime = 0;
+    flipSound.play().catch(() => {});
+  }
+
+  function updateZIndex() {
+    pages.forEach((page, index) => {
+      page.style.zIndex =
+        index < currentPage ? index : totalPages - index;
+    });
+  }
+
+  updateZIndex();
+
+  function nextPage() {
+    if (currentPage < totalPages) {
+      pages[currentPage].classList.add("flipped");
+      currentPage++;
+      updateZIndex();
+      playSound();
+    }
+  }
+
+  function prevPage() {
+    if (currentPage > 0) {
+      currentPage--;
+      pages[currentPage].classList.remove("flipped");
+      updateZIndex();
+      playSound();
+    }
+  }
+
+  // CLICK (left / right)
+  clickLayer.addEventListener("click", (e) => {
+    const rect = clickLayer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+
+    x > rect.width / 2 ? nextPage() : prevPage();
+  });
+
+  // SWIPE (mobile + mouse)
+  clickLayer.addEventListener("pointerdown", (e) => {
+    startX = e.clientX;
+    clickLayer.style.cursor = "grabbing";
+  });
+
+  clickLayer.addEventListener("pointerup", (e) => {
+    const diff = e.clientX - startX;
+    clickLayer.style.cursor = "grab";
+
+    if (Math.abs(diff) > 50) {
+      diff < 0 ? nextPage() : prevPage();
+    }
+  });
+
+  // Buttons support
+  window.nextPage = nextPage;
+  window.prevPage = prevPage;
+</script>
+
+
+
+
+
+</body>
+</html>

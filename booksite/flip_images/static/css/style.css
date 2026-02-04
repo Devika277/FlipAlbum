@@ -13,20 +13,31 @@ body {
     height: 100vh;
     width: 100vw;
 	overflow: hidden;
-	background: #f1c40f;
+	background: #d4c071;
 }
 
 .flipbook {
-    width: 1000px;
-    height: 600px;
+    width: 1300px;
+    height: 500px;
 }
 
 .flipbook .hard {
-    background: #c0392b !important;
-    color: #fff;
+    /* background: #000 !important; */
+      background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.15) 0%,
+      rgba(0, 0, 0, 0.45) 60%,
+      rgba(0, 0, 0, 0.85) 100%
+    );
+    color: #ffffff;
     font-weight: bold;
     border: none; 
 }
+
+.flipbook .hard.intro{
+  background: #c2bfba;
+  }
 
 .flipbook .hard small{
 	font-style: italic;
@@ -92,3 +103,125 @@ body {
 .img-card:hover .delete-btn {
   display: block;
 }
+
+
+.flipbook .hard.cover {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(0,0,0,0.15) 0%,
+      rgba(0,0,0,0.55) 55%,
+      rgba(0,0,0,0.85) 100%
+    );
+}
+.cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  /* ✨ blending magic */
+  mix-blend-mode: normal;
+  opacity: 1;
+
+  /* cinematic feel */
+  filter: 
+  brightness(1.05)
+    contrast(1.05)
+    saturate(1.08);
+
+  z-index: 0;
+}
+.cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.2)
+    );
+    z-index: 1;
+}
+
+
+
+.cover-content {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #fff;
+  z-index: 2;
+  width: 70%;
+}
+
+.cover-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 50px;
+  letter-spacing: 4px;
+  margin: 10px 0;
+}
+
+.cover-content small {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+
+.cover-content p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  margin-top: 10px;
+  opacity: 0.9;
+}
+
+
+.gold-line {
+  display: block;
+  width: 80px;
+  height: 2px;
+  margin: 12px auto;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #d4af37,
+    transparent
+  );
+}
+
+
+
+
+
+.intro-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-style: italic;
+    font-size: 18px;
+    background: #fafafa;
+}
+
+.side-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 160px;
+    z-index: 2;
+    opacity: 0.9;
+}
+
+
+.no-images {
+  text-align: center;
+  color: #777;
+}
+
+

@@ -8,32 +8,67 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <title>Pokemon Magazine</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300&family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+  
+<title>FlipAlbum</title>
 </head>
-
 <body>
   <div class="flipbook">
-    <div class="hard">My Pokemon Gallery <small>~ HankTheTank</small></div>
+    <!-- <div class="hard">My Pokemon Gallery <small>~ HankTheTank</small></div>
     <div class="hard"></div>
     <div>
       <small>Lets Look At Some Amazing Pokemon ❤️</small>
       <small>Gotta Catch 'Em All</small>
+    </div> -->
+
+<!-- FRONT PAGE -->
+<div class="hard cover">
+
+  {% if front_page %}
+    <img class="cover-img" src="{{ front_page.image.url }}">
+
+    <div class="cover-overlay"></div>
+
+
+    <div class="cover-content">
+      <span class="gold-line"></span>
+
+      <h1>{{ front_page.title }}</h1>
+      <small>{{ front_page.date }}</small>
+      <p>{{ front_page.caption }}</p>
+          <span class="gold-line"></span>
+
     </div>
-   
+  {% else %}
+    <div class="cover-content">
+      <h1>My Pokemon Gallery</h1>
+      <small>~ HankTheTank</small>
+    </div>
+  {% endif %}
+</div>
+    <div class="hard intro"></div>
+    <div class="page intro-page">
+      <small>Lets Look At Some Amazing Pokemon ❤️</small>
+      <small>Gotta Catch 'Em All</small>
+    </div>
    <!-- 🔥 DYNAMIC UPLOADED IMAGES -->
+
   {% for img in images %}
     <div>
       <img src="{{ img.image.url }}" alt="">
-      <small>{{ img.caption }}</small>
     </div>
   {% empty %}
     <div>
       <small>No images uploaded yet</small>
     </div>
   {% endfor %}
-    
-    <div class="hard"></div>
-    <div class="hard">Thank You <small>~ HankTheTank</small></div>
+
+
+
+    <div class="hard intro"></div>
+    <div class="hard intro">Thank You <small>~ HankTheTank</small></div>
+      <div class="hard intro"></div>
+
   </div>
 
 <script src="{% static 'js/jquery.js' %}"></script>
@@ -42,6 +77,30 @@
 <script>
     $(".flipbook").turn();
   </script>
-</body>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const collageImages = Array.from(document.querySelectorAll(".collage-img"));
+    const heroImage = document.getElementById("heroImage");
 
+    if (collageImages.length < 4) return;
+
+    // 🔀 Shuffle images
+    collageImages.sort(() => Math.random() - 0.5);
+
+    // 🎯 Pick first image as hero
+    heroImage.src = collageImages[0].src;
+
+    // 🧱 Keep next 3 images in collage
+    collageImages.forEach((img, index) => {
+      if (index < 4) {
+        img.style.display = "block";
+        if (index === 0) img.style.display = "none"; // hide hero from collage
+      } else {
+        img.style.display = "none";
+      }
+    });
+  });
+</script>
+
+</body>
 </html>
